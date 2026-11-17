@@ -1,7 +1,7 @@
 # Ismail Shaikh — Portfolio
 
 Personal portfolio built with Next.js (static export), TypeScript, Tailwind CSS and Framer Motion.
-Live at https://undatedlace.github.io
+Live at https://undatedlace.github.io/portfolio/
 
 ## Develop
 

@@ -27,8 +27,9 @@ jobs:
       - run: npm run build
         env:
           NEXT_PUBLIC_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_KEY }}
-          # Uncomment if the repo is NOT named <user>.github.io:
-          # NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          # Project site: served from https://<user>.github.io/<repo>/
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
