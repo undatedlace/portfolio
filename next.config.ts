@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   images: { unoptimized: true },
+  // Stamp each build so asset() can bust browser caches (GitHub Pages caches files for 10 minutes).
+  env: { NEXT_PUBLIC_BUILD_ID: String(Date.now()) },
   outputFileTracingRoot: __dirname,
   basePath,
   assetPrefix: basePath || undefined,
