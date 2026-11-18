@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FileText, LayoutGrid, Send, User } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
@@ -22,6 +22,7 @@ const isTab = (v: string): v is TabId => tabs.some((t) => t.id === v);
 
 export function Shell() {
   const [active, setActive] = useState<TabId>("about");
+  const panelRef = useRef<HTMLElement>(null);
 
   // Deep-link support: /#resume etc.
   useEffect(() => {
@@ -37,7 +38,15 @@ export function Shell() {
   const select = useCallback((id: TabId) => {
     setActive(id);
     history.replaceState(null, "", `#${id}`);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Bring the new panel into view, not the very top of the page. On phones the profile sidebar
+    // stacks above the panel, so jumping to the top made it look like nothing had changed.
+    // On desktop the panel is already in view, so the page doesn't move.
+    requestAnimationFrame(() => {
+      const el = panelRef.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      if (top < 80 || top > window.innerHeight * 0.55) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }, []);
 
   function onKey(e: React.KeyboardEvent, i: number) {
@@ -92,7 +101,7 @@ export function Shell() {
       {/* The glass card */}
       <div className="glass grid overflow-hidden rounded-[28px] lg:grid-cols-[360px_1fr]">
         <Sidebar />
-        <main className="min-w-0 px-6 py-8 sm:px-10 sm:py-10">
+        <main ref={panelRef} className="min-w-0 scroll-mt-24 px-6 py-8 sm:px-10 sm:py-10">
           <motion.div
             key={active}
             id={`panel-${active}`}
