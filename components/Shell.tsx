@@ -120,7 +120,14 @@ export function Shell() {
         <span>
           © {new Date().getFullYear()} {profile.name} · Mumbai
         </span>
-        <span>Built with Next.js</span>
+        <span>
+          Built with Next.js · Updated{" "}
+          {new Date(Number(process.env.NEXT_PUBLIC_BUILD_ID) || 0)
+            .toISOString()
+            .slice(0, 16)
+            .replace("T", " ")}{" "}
+          UTC
+        </span>
       </footer>
     </div>
   );
